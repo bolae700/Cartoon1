@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOLA - Playful Minimalism</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sky: #7ED3F2;
+            --sun: #FFD166;
+            --pop: #FF6B6B;
+            --fresh: #88D8B0;
+            --bg: #FFF9F2;
+            --ramiz: #FF8E9E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .floating-bg {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            opacity: 0.3;
+            animation: float 12s infinite linear;
+        }
+
+        .shape-1 { 
+            width: 120px; height: 120px;
+            background: var(--sun);
+            border-radius: 30% 70% 70% 30%;
+            top: 20%; left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 80px; height: 80px;
+            background: var(--pop);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            top: 60%; right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 100px; height: 100px;
+            background: var(--fresh);
+            border-radius: 50%;
+            bottom: 10%; left: 30%;
+            animation-delay: 4s;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            perspective: 1000px;
+        }
+
+        .game-logo {
+            font-family: 'Lilita One', cursive;
+            font-size: 4.5rem;
+            color: var(--pop);
+            text-shadow: 
+                3px 3px 0 var(--sun),
+                -1px -1px 0 var(--fresh);
+            transform: rotate(-3deg);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 8px 8px 0 var(--sky);
+            transition: transform 0.3s;
+        }
+
+        .location {
+            color: var(--fresh);
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .btn-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .bubble-btn {
+            background: white;
+            color: var(--pop);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 35px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 
+                5px 5px 0 var(--sun),
+                0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .bubble-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                7px 7px 0 var(--fresh),
+                0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .playful-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 
+                10px 10px 0 var(--sun),
+                0 15px 40px rgba(0,0,0,0.1);
+            max-width: 90%;
+            animation: modalOpen 0.4s forwards;
+        }
+
+        #musicModal {
+            max-width: 700px;
+            width: 95%;
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .friend-card {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 5px 5px 0 var(--sky);
+            min-width: 180px;
+        }
+
+        .friend-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 3px 3px 0 var(--pop);
+        }
+
+        .friend-avatar.mark { background: var(--sun); }
+        .friend-avatar.dolly { background: var(--sky); }
+        .friend-avatar.leader { background: var(--fresh); }
+        .friend-avatar.ramiz { 
+            background: var(--ramiz);
+            box-shadow: 3px 3px 0 #FF4655;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        @keyframes modalOpen {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+        }
+
+        @keyframes modalClose {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0) rotate(15deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .game-logo {
+                font-size: 3rem;
+                padding: 0.5rem 1.5rem;
+            }
+
+            #musicModal {
+                width: 90%;
+                padding: 1rem;
+            }
+
+            .friends-grid {
+                grid-template-columns: repeat(4, 150px);
+                justify-content: start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-bg">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <div class="logo-container">
+        <h1 class="game-logo">BOLA EMAD</h1>
+        <div class="location">🎮 TEXAS, USA 🎮</div>
+    </div>
+
+    <div class="btn-grid">
+        <button class="bubble-btn" onclick="showModal('friends')">
+            👥 Dream Team
+        </button>
+        <button class="bubble-btn" onclick="showModal('music')">
+            🎶 Play Theme
+        </button>
+    </div>
+
+    <div id="friendsModal" class="playful-modal">
+        <h2 style="color: var(--pop); text-align: center; margin-bottom: 2rem;">🌟 The Dream Team 🌟</h2>
+        <div class="friends-grid">
+            <div class="friend-card">
+                <div class="friend-avatar mark">M</div>
+                <h3 style="text-align: center; margin-top:1rem; color:var(--pop);">MARK</h3>
+            </div>
+            <div class="friend-card">
+                <div class="friend-avatar dolly">D</div>
+                <h3 style="text-align: center; margin-top:1rem; color:var(--pop);">DOLLY</h3>
+            </div>
+            <div class="friend-card">
+                <div class="friend-avatar leader">L</div>
+                <h3 style="text-align: center; margin-top:1rem; color:var(--pop);">LEADER</h3>
+            </div>
+            <div class="friend-card">
+                <div class="friend-avatar ramiz">R</div>
+                <h3 style="text-align: center; margin-top:1rem; color:var(--pop);">RAMIZ</h3>
+            </div>
+        </div>
+        <button class="bubble-btn" style="margin: 1.5rem auto 0;" onclick="closeModals()">
+            🎮 Close
+        </button>
+    </div>
+
+    <div id="musicModal" class="playful-modal">
+        <h2 style="color: var(--pop); text-align: center; margin-bottom: 1.5rem;">🎵 BGM Player 🎵</h2>
+        <div style="position:relative; padding-bottom:56.25%;">
+            <iframe style="position:absolute; width:100%; height:100%; border-radius:15px;" 
+                    src="https://www.youtube.com/embed/UOxkGD8qRB4" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+        <button class="bubble-btn" style="margin: 1.5rem auto 0;" onclick="closeModals()">
+            🎮 Stop
+        </button>
+    </div>
+
+    <script>
+        let isModalAnimating = false;
+
+        function showModal(type) {
+            if(isModalAnimating) return;
+            
+            const modal = document.getElementById(type + 'Modal');
+            modal.style.display = 'block';
+            modal.style.animation = 'modalOpen 0.4s forwards';
+            isModalAnimating = true;
+            setTimeout(() => isModalAnimating = false, 400);
+        }
+
+        function closeModals() {
+            if(isModalAnimating) return;
+            
+            const modals = document.querySelectorAll('.playful-modal');
+            modals.forEach(modal => {
+                if(modal.style.display === 'block') {
+                    modal.style.animation = 'modalClose 0.3s forwards';
+                    isModalAnimating = true;
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        modal.style.animation = '';
+                        isModalAnimating = false;
+                    }, 280);
+                }
+            });
+        }
+
+        window.onclick = function(e) {
+            if(e.target.classList.contains('playful-modal')) closeModals();
+        }
+
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.playful-modal').forEach(modal => {
+                modal.style.animation = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
